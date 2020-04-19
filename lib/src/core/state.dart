@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../flutter_async_bloc.dart';
+import 'response.dart';
 
 /*********************************************/
 /************ Async state bloc ***************/
