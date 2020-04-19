@@ -42,6 +42,27 @@ class AsyncDoneState<D> extends AsyncState {
       ];
 }
 
+/// Async success state with data of [D]
+///
+class AsyncSuccessState<D> extends AsyncState {
+  final D data;
+
+  AsyncSuccessState(this.data);
+
+  @override
+  List<Object> get props => [data];
+}
+
+/// Async error state with error message of [AsyncError]
+class AsyncErrorState extends AsyncState {
+  final AsyncError error;
+
+  AsyncErrorState(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
 /// Async initial state
 ///
 class AsyncResetState extends AsyncState {
