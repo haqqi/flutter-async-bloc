@@ -18,8 +18,10 @@ class AsyncError extends Equatable {
   const AsyncError({
     @required this.id,
     @required this.message,
-    this.code = 0,
-  }) : assert(message != null);
+    @required this.code,
+  })  : assert(id != null),
+        assert(code != null),
+        assert(message != null);
 
   @override
   List<Object> get props => [
