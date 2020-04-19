@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../../flutter_async_bloc.dart';
+import 'response.dart';
 
 /*********************************************/
 /**************** Async event ****************/
