@@ -42,7 +42,7 @@ class AsyncBloc<D, U extends AsyncUseCaseInterface<D>>
       yield AsyncSendingState();
     } else if (event is AsyncDoneEvent) {
       // Send the done state
-      yield AsyncDoneState(event.response);
+      yield AsyncDoneState<D>(event.response);
     } else if (event is AsyncResetEvent) {
       // yield reset first, then yield init
       yield AsyncResetState();
