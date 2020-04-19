@@ -42,19 +42,16 @@ class AsyncBloc<D, U extends AsyncUseCaseInterface<D>>
       yield AsyncSendingState();
     } else if (event is AsyncDoneEvent) {
       // Send the done state
-      yield AsyncDoneState();
-
-      if (event.response.hasError) {
-        // Send error state
-        yield AsyncErrorState(event.response.error);
-      } else {
-        // Send success state
-        yield AsyncSuccessState<D>(event.response.data);
-      }
+      yield AsyncDoneState(event.response);
     } else if (event is AsyncResetEvent) {
       // Init state again
       yield AsyncInitState();
     }
+  }
+
+  /// Simplify reset state
+  void reset() async {
+    add(AsyncResetEvent());
   }
 
   /// Send event to be called in the widget
