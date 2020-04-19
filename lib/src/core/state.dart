@@ -38,8 +38,14 @@ class AsyncDoneState<D> extends AsyncState {
 
   @override
   List<Object> get props => [
-    response,
-  ];
+        response,
+      ];
+}
+
+/// Async initial state
+///
+class AsyncResetState extends AsyncState {
+  const AsyncResetState();
 }
 
 /*********************************************/
