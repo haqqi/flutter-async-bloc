@@ -52,8 +52,10 @@ class _AsyncSingleResultPageState<D, U extends AsyncUseCaseInterface<D>>
   void initState() {
     super.initState();
 
-    // init the bloc
+    // get the bloc
     bloc = BlocProvider.of<AsyncBloc<D, U>>(context);
+    // initialize send
+    bloc.send();
 
     // check default controller
     if (widget.refreshController == null) {
