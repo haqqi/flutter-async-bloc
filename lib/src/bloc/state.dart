@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'response.dart';
+import '../common/response.dart';
 
 /*********************************************/
 /************ Async state bloc ***************/

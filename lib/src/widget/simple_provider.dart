@@ -1,38 +1,33 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/single_child_widget.dart';
 
-import '../core/bloc.dart';
-import '../core/usecase.dart';
+import '../bloc/async.dart';
+import '../common/usecase.dart';
 
 @immutable
-class AsyncSimpleProvider<D, U extends AsyncUseCaseInterface<D>>
-    extends SingleChildStatelessWidget {
-  // the simple request creator
-  final U Function(BuildContext context) create;
+class AsyncBlocProvider<D, U extends AsyncUseCaseInterface<D>>
+    extends BlocProvider<AsyncBloc<D, U>> {
+  AsyncBlocProvider({
+    /// Create use case
+    U Function(BuildContext context) createUseCase,
 
-  AsyncSimpleProvider({
-    @required this.create,
-    Key key,
+    /// The child
     Widget child,
-  })  : assert(create != null),
-        super(child: child, key: key);
 
-  @override
-  Widget buildWithChild(BuildContext context, Widget child) {
-    return BlocProvider<AsyncBloc<D, U>>(
-      create: (BuildContext context) {
-        // create usecase
-        U useCase = create(context);
+    /// Just a key
+    Key key,
+  })  : assert(createUseCase != null),
+        super(
+          create: (BuildContext context) {
+            U useCase = createUseCase(context);
+            // it's created!
+            AsyncBloc<D, U> bloc = AsyncBloc<D, U>(
+              useCase: useCase,
+            );
 
-        // it's created!
-        AsyncBloc<D, U> bloc = AsyncBloc<D, U>(
-          useCase: useCase,
+            return bloc;
+          },
+          child: child,
+          key: key,
         );
-
-        return bloc;
-      },
-      child: child,
-    );
-  }
 }

@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
+import '../common/response.dart';
+import '../common/usecase.dart';
 import 'event.dart';
-import 'response.dart';
 import 'state.dart';
-import 'usecase.dart';
 
 /*********************************************/
 /************ Async basic bloc ***************/

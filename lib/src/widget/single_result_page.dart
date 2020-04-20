@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../core/bloc.dart';
-import '../core/response.dart';
-import '../core/state.dart';
-import '../core/usecase.dart';
-import 'refresh_controller.dart';
+import '../bloc/async.dart';
+import '../common/response.dart';
+import '../bloc/state.dart';
+import '../common/usecase.dart';
+import '../common/refresh_controller.dart';
 
 /// Single result page based on the data [D]
 class AsyncSingleResultPage<D, U extends AsyncUseCaseInterface<D>>
