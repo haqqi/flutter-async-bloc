@@ -1,25 +1,23 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../common/response.dart';
+
 /// Unlimited list response with list of data and meta
 @immutable
-class UnlimitedListResponse<M> extends Equatable {
+class UnlimitedListResponse<M> extends AsyncResponse<List<M>> {
   /// the meta
   final UnlimitedListResponseMeta meta;
 
-  /// the result
-  final List<M> result;
+  UnlimitedListResponse.success({
+    @required List<M> data,
+    @required this.meta,
+  }) : super.success(data);
 
-  UnlimitedListResponse({
-    this.meta,
-    this.result,
-  });
-
-  @override
-  List<Object> get props => [
-        meta,
-        result,
-      ];
+  UnlimitedListResponse.error({
+    @required AsyncError error,
+  })  : meta = null,
+        super.error(error);
 }
 
 @immutable
