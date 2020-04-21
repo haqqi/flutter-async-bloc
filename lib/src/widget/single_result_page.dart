@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/async.dart';
-import '../common/response.dart';
 import '../bloc/state.dart';
-import '../common/usecase.dart';
 import '../common/refresh_controller.dart';
+import '../common/response.dart';
+import '../common/usecase.dart';
+import '../common/widget.dart';
 
 /// Single result page based on the data [D]
 class AsyncSingleResultPage<D, U extends AsyncUseCaseInterface<D>>
     extends StatefulWidget {
   /// Loading widget builder. If it is null, default widget will be shown.
-  final Widget Function(BuildContext context) loadingBuilder;
+  final WidgetBuilder loadingBuilder;
 
   /// Error widget builder. If it is null, error message will be shown.
   final Widget Function(BuildContext context, AsyncError error) errorBuilder;
@@ -73,7 +74,7 @@ class _AsyncSingleResultPageState<D, U extends AsyncUseCaseInterface<D>>
 
     // if response is null, show on loading
     if (response == null) {
-      display = _OnLoadingWidget();
+      display = OnLoadingWidget();
     } else {
       Widget displayChild;
 
@@ -119,33 +120,6 @@ class _AsyncSingleResultPageState<D, U extends AsyncUseCaseInterface<D>>
       });
     }
     return await bloc.send();
-  }
-}
-
-/// Simplify loading widget algorithm.
-class _OnLoadingWidget extends StatelessWidget {
-  final Widget Function(BuildContext context) loadingBuilder;
-
-  _OnLoadingWidget({
-    this.loadingBuilder,
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Widget effectiveLoadingWidget;
-
-    if (loadingBuilder != null) {
-      // build the loading
-      effectiveLoadingWidget = loadingBuilder(context);
-    } else {
-      // default loading
-      effectiveLoadingWidget = Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    return effectiveLoadingWidget;
   }
 }
 
