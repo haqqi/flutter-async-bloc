@@ -28,7 +28,6 @@ class PaginationRequestMeta extends Equatable {
     int page,
     int perPage,
     String fetchedAt,
-    bool hasReachedEnd,
     String searchQuery,
     String orderBy,
     String sort,
