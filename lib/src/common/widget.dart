@@ -28,10 +28,10 @@ class OnLoadingWidget extends StatelessWidget {
 }
 
 /// Simplify loading widget algorithm.
-class EmptyListWidget extends StatelessWidget {
+class EmptyListMessageWidget extends StatelessWidget {
   final WidgetBuilder emptyListMessageBuilder;
 
-  EmptyListWidget({
+  EmptyListMessageWidget({
     this.emptyListMessageBuilder,
     Key key,
   }) : super(key: key);
@@ -41,15 +41,27 @@ class EmptyListWidget extends StatelessWidget {
     Widget effectiveWidget;
 
     if (emptyListMessageBuilder != null) {
-      // build the loading
+      // build the error
       effectiveWidget = emptyListMessageBuilder(context);
     } else {
-      // default loading
-      effectiveWidget = Center(
-        child: CircularProgressIndicator(),
+      // default error
+      effectiveWidget = Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
+        child: Center(
+          child: Text(
+            "Sorry, this page does not have data yet.",
+            textAlign: TextAlign.center,
+          ),
+        ),
       );
     }
 
-    return effectiveWidget;
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: effectiveWidget,
+    );
   }
 }
