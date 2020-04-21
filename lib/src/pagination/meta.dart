@@ -5,18 +5,23 @@ import 'package:meta/meta.dart';
 ///
 @immutable
 class PaginationRequestMeta extends Equatable {
+  static const String sortAsc = "asc";
+  static const String sortDesc = "desc";
+
   final int page;
   final int perPage;
   final String fetchedAt;
-  final bool hasReachedEnd;
   final String searchQuery;
+  final String orderBy;
+  final String sort;
 
   PaginationRequestMeta({
     this.page = 1,
     this.perPage = 20,
     this.fetchedAt = '',
-    this.hasReachedEnd = false,
     this.searchQuery = '',
+    this.orderBy = '',
+    this.sort = '',
   });
 
   PaginationRequestMeta copyWith({
@@ -25,13 +30,16 @@ class PaginationRequestMeta extends Equatable {
     String fetchedAt,
     bool hasReachedEnd,
     String searchQuery,
+    String orderBy,
+    String sort,
   }) {
     return PaginationRequestMeta(
       page: page ?? this.page,
       perPage: perPage ?? this.perPage,
       fetchedAt: fetchedAt ?? this.fetchedAt,
-      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
       searchQuery: searchQuery ?? this.searchQuery,
+      orderBy: orderBy ?? this.orderBy,
+      sort: sort ?? this.sort,
     );
   }
 
@@ -40,8 +48,9 @@ class PaginationRequestMeta extends Equatable {
         page,
         perPage,
         fetchedAt,
-        hasReachedEnd,
         searchQuery,
+        orderBy,
+        sort,
       ];
 }
 
