@@ -80,7 +80,7 @@ class _AsyncSingleResultPageState<D, U extends AsyncUseCaseInterface<D>>
 
       // if has error, show error widget
       if (response.hasError) {
-        displayChild = _OnErrorWidget(
+        displayChild = OnErrorWidget(
           error: response.error,
         );
       } else {
@@ -120,47 +120,5 @@ class _AsyncSingleResultPageState<D, U extends AsyncUseCaseInterface<D>>
       });
     }
     return await bloc.send();
-  }
-}
-
-/// Simplify error widget algorithm
-class _OnErrorWidget extends StatelessWidget {
-  final Widget Function(BuildContext context, AsyncError error) errorBuilder;
-  final AsyncError error;
-
-  _OnErrorWidget({
-    @required this.error,
-    this.errorBuilder,
-    Key key,
-  })  : assert(error != null),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Widget effectiveWidget;
-
-    if (errorBuilder != null) {
-      // build the error
-      effectiveWidget = errorBuilder(context, error);
-    } else {
-      // default error
-      effectiveWidget = Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
-        child: Center(
-          child: Text(
-            error.code.toString() + ": " + error.message,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-
-    return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(),
-      child: effectiveWidget,
-    );
   }
 }

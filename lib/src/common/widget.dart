@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'response.dart';
+
 /// Simplify loading widget algorithm.
 class OnLoadingWidget extends StatelessWidget {
   final WidgetBuilder loadingBuilder;
@@ -24,6 +26,48 @@ class OnLoadingWidget extends StatelessWidget {
     }
 
     return effectiveWidget;
+  }
+}
+
+/// Simplify error widget algorithm
+class OnErrorWidget extends StatelessWidget {
+  final Widget Function(BuildContext context, AsyncError error) errorBuilder;
+  final AsyncError error;
+
+  OnErrorWidget({
+    @required this.error,
+    this.errorBuilder,
+    Key key,
+  })  : assert(error != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget effectiveWidget;
+
+    if (errorBuilder != null) {
+      // build the error
+      effectiveWidget = errorBuilder(context, error);
+    } else {
+      // default error
+      effectiveWidget = Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
+        child: Center(
+          child: Text(
+            error.code.toString() + ": " + error.message,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: effectiveWidget,
+    );
   }
 }
 
