@@ -50,7 +50,8 @@ class OnErrorWidget extends StatelessWidget {
       effectiveWidget = errorBuilder(context, error);
     } else {
       // default error
-      effectiveWidget = Padding(
+      effectiveWidget = Container(
+        height: double.maxFinite,
         padding: EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
@@ -64,9 +65,14 @@ class OnErrorWidget extends StatelessWidget {
       );
     }
 
-    return SingleChildScrollView(
+    return CustomScrollView(
       physics: AlwaysScrollableScrollPhysics(),
-      child: effectiveWidget,
+      slivers: <Widget>[
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: effectiveWidget,
+        ),
+      ],
     );
   }
 }
@@ -89,7 +95,7 @@ class EmptyListMessageWidget extends StatelessWidget {
       effectiveWidget = emptyListMessageBuilder(context);
     } else {
       // default error
-      effectiveWidget = Padding(
+      effectiveWidget = Container(
         padding: EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
@@ -103,9 +109,14 @@ class EmptyListMessageWidget extends StatelessWidget {
       );
     }
 
-    return SingleChildScrollView(
+    return CustomScrollView(
       physics: AlwaysScrollableScrollPhysics(),
-      child: effectiveWidget,
+      slivers: <Widget>[
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: effectiveWidget,
+        ),
+      ],
     );
   }
 }
