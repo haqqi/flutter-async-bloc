@@ -43,7 +43,12 @@ class ULState<M> extends Equatable {
   }
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        isFetching,
+        error,
+        data.length,
+        meta,
+      ];
 }
 
 /// Unlimited state meta
