@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -7,7 +8,10 @@ import 'response.dart';
 import "state.dart";
 
 class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
+  // use case of fetching
   final U useCase;
+
+  final ScrollController scrollController = ScrollController();
 
   /// State for catching the availability. For example, after pop we don't
   /// do anything regarding unfinished response.
@@ -16,7 +20,10 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
   ULBloc({
     @required this.useCase,
   })  : assert(useCase != null),
-        super();
+        super() {
+    // add listener to scroll controller
+    scrollController.addListener(_onScroll);
+  }
 
   @override
   ULState<M> get initialState => ULState<M>();
@@ -97,9 +104,29 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
     }
   }
 
+  void _onScroll() {
+    if (!scrollController.hasClients) {
+      return;
+    }
+
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final currentScroll = scrollController.position.pixels;
+
+    // if it over the threshold
+    if (maxScroll - currentScroll <= 200) {
+      // only fetch if it is not fetching and has not reached end
+      if (!state.isFetching && !state.meta.hasReachedEnd) {
+        add(ULFetchEvent());
+      }
+    }
+  }
+
   @override
   Future<void> close() {
+    // mark that this is not available anymore
     _isAvailable = false;
+    // dispose the scroll controller
+    scrollController.dispose();
 
     return super.close();
   }

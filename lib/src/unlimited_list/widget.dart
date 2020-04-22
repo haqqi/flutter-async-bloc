@@ -26,7 +26,7 @@ class UnlimitedListWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ULBloc<M, U> bloc = BlocProvider.of<ULBloc<M, U>>(context);
+    final ULBloc<M, U> bloc = BlocProvider.of<ULBloc<M, U>>(context);
 
     return BlocBuilder<ULBloc<M, U>, ULState<M>>(
       bloc: bloc,
@@ -53,7 +53,7 @@ class UnlimitedListWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
         } else {
           // if the result is above 0, just display the result
           effectiveWidget = ListView.separated(
-//            controller: _scrollController,
+            controller: bloc.scrollController,
             physics: AlwaysScrollableScrollPhysics(),
             padding: padding,
             itemBuilder: (BuildContext context, int index) {
