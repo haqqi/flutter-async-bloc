@@ -11,7 +11,7 @@ import 'state.dart';
 /// builder for the widget
 typedef ListTileBuilder<M> = Widget Function(BuildContext context, M model);
 
-class UnlimitedListWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
+class ULWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
   /// List tile builder that has parameter of [M]
   final ListTileBuilder<M> listTileBuilder;
 
@@ -34,7 +34,7 @@ class UnlimitedListWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
   /// Padding for the list view
   final EdgeInsetsGeometry padding;
 
-  UnlimitedListWidget({
+  ULWidget({
     @required this.listTileBuilder,
     @required this.separatorBuilder,
     this.loadingBuilder,

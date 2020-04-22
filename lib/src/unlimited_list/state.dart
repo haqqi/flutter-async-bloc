@@ -32,15 +32,15 @@ class ULState<M> extends Equatable {
     this.isFetching = false,
     this.error = null,
   })  : data = (data != null) ? data : List<M>(),
-        meta = (meta != null) ? meta : ULStateMeta.init();
+        meta = (meta != null) ? meta : ULStateMeta();
 
-  ULState copyWith({
+  ULState<M> copyWith({
     bool isFetching,
     AsyncError error,
     List<M> data,
     ULStateMeta meta,
   }) {
-    return ULState(
+    return ULState<M>(
       isFetching: isFetching ?? this.isFetching,
       error: error ?? this.error,
       data: data ?? this.data,
@@ -55,6 +55,11 @@ class ULState<M> extends Equatable {
         data.length,
         meta,
       ];
+
+  @override
+  String toString() {
+    return 'ULState<{$M}>{isFetching: $isFetching, error: $error, data: $data, meta: $meta}';
+  }
 }
 
 /// Unlimited state meta
@@ -81,7 +86,7 @@ class ULStateMeta extends Equatable {
   // has reached end
   final bool hasReachedEnd;
 
-  ULStateMeta._({
+  ULStateMeta({
     this.currentPage = 0, // start from page 0 (no fetching yet)
     this.perPage = 20,
     this.fetchedAt = '',
@@ -90,18 +95,6 @@ class ULStateMeta extends Equatable {
     this.sort = Constant.sortDesc,
     this.hasReachedEnd = false,
   });
-
-  ULStateMeta.init({
-    int perPage,
-    String searchQuery,
-    String orderBy,
-    String sort,
-  }) : this._(
-          perPage: perPage,
-          searchQuery: searchQuery,
-          orderBy: orderBy,
-          sort: sort,
-        );
 
   ULStateMeta copyWith({
     int currentPage,
@@ -112,7 +105,7 @@ class ULStateMeta extends Equatable {
     String sort,
     bool hasReachedEnd,
   }) {
-    return ULStateMeta._(
+    return ULStateMeta(
       currentPage: currentPage ?? this.currentPage,
       perPage: perPage ?? this.perPage,
       fetchedAt: fetchedAt ?? this.fetchedAt,
@@ -133,4 +126,9 @@ class ULStateMeta extends Equatable {
         sort,
         hasReachedEnd,
       ];
+
+  @override
+  String toString() {
+    return 'ULStateMeta{currentPage: $currentPage, perPage: $perPage, fetchedAt: $fetchedAt, searchQuery: $searchQuery, orderBy: $orderBy, sort: $sort, hasReachedEnd: $hasReachedEnd}';
+  }
 }
