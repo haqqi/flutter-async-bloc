@@ -19,6 +19,12 @@ class ULState<M> extends Equatable {
   // current meta
   final ULStateMeta meta;
 
+  /// check if the response has data
+  bool get hasData => data.length > 0;
+
+  /// check if the response has error
+  bool get hasError => error != null;
+
   // default constructor
   ULState({
     List<M> data,
