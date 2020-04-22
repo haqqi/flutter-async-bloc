@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import './../common/response.dart';
+import '../common/response.dart';
+import '../consts.dart';
 
 /// Unlimited state
 @immutable
@@ -34,10 +35,6 @@ class ULState<M> extends Equatable {
 /// Unlimited state meta
 @immutable
 class ULStateMeta extends Equatable {
-  // const for sorting
-  static const String sortAsc = "asc";
-  static const String sortDesc = "desc";
-
   // current page, start from 1
   final int currentPage;
 
@@ -62,7 +59,7 @@ class ULStateMeta extends Equatable {
     this.fetchedAt = '',
     this.searchQuery = '',
     this.orderBy = 'created_at',
-    this.sort = sortDesc,
+    this.sort = Constant.sortDesc,
   });
 
   ULStateMeta.init({
