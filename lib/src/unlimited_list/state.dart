@@ -28,6 +28,20 @@ class ULState<M> extends Equatable {
   })  : data = (data != null) ? data : List<M>(),
         meta = (meta != null) ? meta : ULStateMeta.init();
 
+  ULState copyWith({
+    bool isFetching,
+    AsyncError error,
+    List<M> data,
+    ULStateMeta meta,
+  }) {
+    return ULState(
+      isFetching: isFetching ?? this.isFetching,
+      error: error ?? this.error,
+      data: data ?? this.data,
+      meta: meta ?? this.meta,
+    );
+  }
+
   @override
   List<Object> get props => [];
 }
@@ -73,6 +87,24 @@ class ULStateMeta extends Equatable {
           orderBy: orderBy,
           sort: sort,
         );
+
+  ULStateMeta copyWith({
+    currentPage,
+    perPage,
+    fetchedAt,
+    searchQuery,
+    orderBy,
+    sort,
+  }) {
+    return ULStateMeta._(
+      currentPage: currentPage ?? this.currentPage,
+      perPage: perPage ?? this.perPage,
+      fetchedAt: fetchedAt ?? this.fetchedAt,
+      searchQuery: searchQuery ?? this.searchQuery,
+      orderBy: orderBy ?? this.orderBy,
+      sort: sort ?? this.sort,
+    );
+  }
 
   @override
   List<Object> get props => [
