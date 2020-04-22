@@ -67,13 +67,17 @@ class ULStateMeta extends Equatable {
   // order direction
   final String sort;
 
+  // has reached end
+  final bool hasReachedEnd;
+
   ULStateMeta._({
-    this.currentPage = 1,
+    this.currentPage = 0, // start from page 0 (no fetching yet)
     this.perPage = 20,
     this.fetchedAt = '',
     this.searchQuery = '',
     this.orderBy = 'created_at',
     this.sort = Constant.sortDesc,
+    this.hasReachedEnd = false,
   });
 
   ULStateMeta.init({
@@ -89,12 +93,13 @@ class ULStateMeta extends Equatable {
         );
 
   ULStateMeta copyWith({
-    currentPage,
-    perPage,
-    fetchedAt,
-    searchQuery,
-    orderBy,
-    sort,
+    int currentPage,
+    int perPage,
+    String fetchedAt,
+    String searchQuery,
+    String orderBy,
+    String sort,
+    bool hasReachedEnd,
   }) {
     return ULStateMeta._(
       currentPage: currentPage ?? this.currentPage,
@@ -103,6 +108,7 @@ class ULStateMeta extends Equatable {
       searchQuery: searchQuery ?? this.searchQuery,
       orderBy: orderBy ?? this.orderBy,
       sort: sort ?? this.sort,
+      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
     );
   }
 
@@ -114,5 +120,6 @@ class ULStateMeta extends Equatable {
         fetchedAt,
         orderBy,
         sort,
+        hasReachedEnd,
       ];
 }
