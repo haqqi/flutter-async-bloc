@@ -31,11 +31,9 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
   @override
   Stream<ULState<M>> mapEventToState(ULEvent event) async* {
     if (event is ULFetchEvent) {
-      print('Mapping ULFetchEvent event');
       // pipe next page fetching
       yield* _fetchNextPage();
     } else if (event is ULRefreshEvent) {
-      print('Mapping ULRefreshEvent event');
       // yield reset data first
       yield state.copyWith(
         data: state.data..clear(),
@@ -49,7 +47,6 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
       // pipe next page fetching
       yield* _fetchNextPage();
     } else if (event is ULSubmitSearchEvent) {
-      print('Mapping ULSubmitSearchEvent event');
       // yield reset data first
       yield state.copyWith(
         data: state.data..clear(), // clear the data
