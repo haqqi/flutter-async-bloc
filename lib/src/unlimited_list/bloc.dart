@@ -6,10 +6,11 @@ import 'request.dart';
 import 'response.dart';
 import "state.dart";
 
-class ULBloc<M> extends Bloc<ULEvent, ULState<M>> {
-  final ULUseCase<M> useCase;
+class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
+  final U useCase;
 
-  // state for catching the availability
+  /// State for catching the availability. For example, after pop we don't
+  /// do anything regarding unfinished response.
   bool _isAvailable = true;
 
   ULBloc({
