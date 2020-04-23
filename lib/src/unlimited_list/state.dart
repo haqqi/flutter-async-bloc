@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../common/consts.dart';
 import '../common/response.dart';
-import '../consts.dart';
 
 /// Unlimited state
 @immutable

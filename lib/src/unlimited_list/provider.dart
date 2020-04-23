@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../flutter_async_bloc.dart';
 import 'bloc.dart';
+import 'event.dart';
 import 'request.dart';
 
 class ULBlocProvider<M, U extends ULUseCase<M>>
