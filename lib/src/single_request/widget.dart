@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/single_child_widget.dart';
 
 import '../common/response.dart';
 import '../common/widget.dart';
@@ -7,6 +8,20 @@ import 'bloc.dart';
 import 'event.dart';
 import 'request.dart';
 import 'state.dart';
+
+/// Type definition for async response callback success that has build context
+///
+typedef SRSuccessCallback<R> = void Function(
+  BuildContext context,
+  R data,
+);
+
+/// Type definition for async response callback error that has build context
+///
+typedef SRErrorCallback = void Function(
+  BuildContext context,
+  AsyncError error,
+);
 
 /// Single request widget, to display the result after done event.
 class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
@@ -74,6 +89,46 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+class SROnDoneListener<R, U extends SRUseCase<R>>
+    extends SingleChildStatelessWidget {
+  /// Success callback
+  final SRSuccessCallback<R> onSuccess;
+  final SRErrorCallback onError;
+
+  SROnDoneListener({
+    this.onSuccess,
+    this.onError,
+    Widget child,
+    Key key,
+  })  : assert(onSuccess != null),
+        super(
+          child: child,
+          key: key,
+        );
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget child) {
+    final SRBloc<R, U> bloc = BlocProvider.of<SRBloc<R, U>>(context);
+
+    return BlocListener<SRBloc<R, U>, SRState>(
+      bloc: bloc,
+      listener: (BuildContext context, SRState state) {
+        if (state is SRDoneState<R>) {
+          if (state.response.hasData && onSuccess != null) {
+            onSuccess(context, state.response.data);
+          } else if (state.response.hasError && onError != null) {
+            onError(context, state.response.error);
+          }
+        }
+      },
+      condition: (SRState prevState, SRState currentState) {
+        return (currentState is SRDoneState<R>);
+      },
+      child: child,
     );
   }
 }
