@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../common/consts.dart';
+import '../common/constant.dart';
 import '../common/response.dart';
 
 /// Unlimited state
