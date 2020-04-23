@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc.dart';
-import 'event.dart';
 import 'request.dart';
 
-class SRBlocProvider<R, U extends SRUseCase<R>>
-    extends BlocProvider<SRBloc<R, U>> {
-  SRBlocProvider({
+class FSBlocProvider<R, U extends FSUseCase<R>>
+    extends BlocProvider<FSBloc<R, U>> {
+  FSBlocProvider({
+    /// Use case builder
     @required U Function(BuildContext context) useCase,
     Widget child,
     Key key,
   })  : assert(useCase != null),
         super(
           create: (BuildContext context) {
-            return SRBloc<R, U>(
+            return FSBloc<R, U>(
               useCase: useCase(context),
-            )..add(SRFetchEvent());
+            );
           },
           child: child,
           key: key,

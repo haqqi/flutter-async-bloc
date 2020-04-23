@@ -18,6 +18,7 @@ class ULBlocProvider<M, U extends ULUseCase<M>>
               useCase: useCase(context),
             )..add(ULFetchEvent());
           },
+          child: child,
           key: key,
         );
 }
