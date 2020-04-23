@@ -8,6 +8,7 @@ import 'event.dart';
 import 'request.dart';
 import 'state.dart';
 
+/// Single request widget, to display the result after done event.
 class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
   /// Builder of the result
   final Widget Function(BuildContext context, R result) resultBuilder;
@@ -19,14 +20,10 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
   final Widget Function(BuildContext context, AsyncError error)
       errorResultBuilder;
 
-  /// whether refresh will clear the result
-  final bool refreshClearData;
-
   SRWidget({
     @required this.resultBuilder,
     this.loadingBuilder,
     this.errorResultBuilder,
-    this.refreshClearData = true,
     Key key,
   })  : assert(resultBuilder != null),
         super(key: key);
@@ -65,11 +62,7 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () async {
-              bloc.add(
-                SRFetchEvent<R>(
-                  previousResult: refreshClearData ? null : state.response.data,
-                ),
-              );
+              bloc.add(SRFetchEvent());
             },
             child: effectiveWidget,
           );

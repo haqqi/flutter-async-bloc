@@ -12,17 +12,6 @@ abstract class SREvent extends Equatable {
 }
 
 @immutable
-class SRFetchEvent<R> extends SREvent {
-  final R previousResult;
-
-  const SRFetchEvent({
-    this.previousResult,
-  });
-
-  bool get hasPreviousResult => previousResult != null;
-
-  @override
-  List<Object> get props => [
-        previousResult,
-      ];
+class SRFetchEvent extends SREvent {
+  const SRFetchEvent();
 }
