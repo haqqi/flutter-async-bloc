@@ -14,12 +14,8 @@ class SRBloc<R, U extends SRUseCase<R>> extends Bloc<SREvent, SRState> {
   /// do anything regarding unfinished response.
   bool _isAvailable = true;
 
-  /// whether refresh will clear the data
-  final bool refreshClearData;
-
   SRBloc({
     @required this.useCase,
-    this.refreshClearData = true,
   })  : assert(useCase != null),
         super();
 
@@ -30,7 +26,7 @@ class SRBloc<R, U extends SRUseCase<R>> extends Bloc<SREvent, SRState> {
   Stream<SRState> mapEventToState(SREvent event) async* {
     // if the event is fetching
     if (event is SRFetchEvent<R>) {
-      yield SRFetchingState(
+      yield SRFetchingState<R>(
         previousResult: event.previousResult,
       );
 
@@ -41,7 +37,7 @@ class SRBloc<R, U extends SRUseCase<R>> extends Bloc<SREvent, SRState> {
         return;
       }
 
-      yield SRDoneState(
+      yield SRDoneState<R>(
         response: response,
       );
     }
