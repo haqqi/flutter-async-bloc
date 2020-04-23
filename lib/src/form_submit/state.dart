@@ -19,16 +19,7 @@ class FSInitState extends FSState {
 
 @immutable
 class FSSendingState extends FSState {
-  final bool blocking;
-
-  FSSendingState({
-    this.blocking,
-  });
-
-  @override
-  List<Object> get props => [
-        blocking,
-      ];
+  const FSSendingState();
 }
 
 @immutable
