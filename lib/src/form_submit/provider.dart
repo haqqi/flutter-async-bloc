@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc.dart';
 import 'request.dart';
 
-class FSBlocProvider<R, U extends FormSubmitUseCase<R>>
+class FormSubmitBlocProvider<R, U extends FormSubmitUseCase<R>>
     extends BlocProvider<FormSubmitBloc<R, U>> {
-  FSBlocProvider({
+  FormSubmitBlocProvider({
     /// Use case builder
     @required U Function(BuildContext context) useCase,
     Widget child,

@@ -30,7 +30,8 @@ class FormSubmitWidget<R, U extends FormSubmitUseCase<R>>
   }
 }
 
-class FSButton<R, U extends FormSubmitUseCase<R>> extends StatelessWidget {
+class FormSubmitButton<R, U extends FormSubmitUseCase<R>>
+    extends StatelessWidget {
   /// if this is defined, we catch the sending blocking
   final WidgetBuilder blockLoader;
 
@@ -42,7 +43,7 @@ class FSButton<R, U extends FormSubmitUseCase<R>> extends StatelessWidget {
 
   final Widget Function(BuildContext context, GestureTapCallback send) builder;
 
-  FSButton({
+  FormSubmitButton({
     @required this.builder,
     @required this.onSuccess,
     this.onError,
