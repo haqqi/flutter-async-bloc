@@ -6,7 +6,7 @@ import '../common/response.dart';
 
 /// Unlimited state
 @immutable
-class ULState<M> extends Equatable {
+class UnlimitedListState<M> extends Equatable {
   // is fetching
   final bool isFetching;
 
@@ -17,7 +17,7 @@ class ULState<M> extends Equatable {
   final List<M> data;
 
   // current meta
-  final ULStateMeta meta;
+  final UnlimitedListStateMeta meta;
 
   /// check if the response has data
   bool get hasData => data.length > 0;
@@ -26,21 +26,21 @@ class ULState<M> extends Equatable {
   bool get hasError => error != null;
 
   // default constructor
-  ULState({
+  UnlimitedListState({
     List<M> data,
-    ULStateMeta meta,
+    UnlimitedListStateMeta meta,
     this.isFetching = false,
     this.error = null,
   })  : data = (data != null) ? data : List<M>(),
-        meta = (meta != null) ? meta : ULStateMeta();
+        meta = (meta != null) ? meta : UnlimitedListStateMeta();
 
-  ULState<M> copyWith({
+  UnlimitedListState<M> copyWith({
     bool isFetching,
     AsyncError error,
     List<M> data,
-    ULStateMeta meta,
+    UnlimitedListStateMeta meta,
   }) {
-    return ULState<M>(
+    return UnlimitedListState<M>(
       isFetching: isFetching ?? this.isFetching,
       error: error ?? this.error,
       data: data ?? this.data,
@@ -64,7 +64,7 @@ class ULState<M> extends Equatable {
 
 /// Unlimited state meta
 @immutable
-class ULStateMeta extends Equatable {
+class UnlimitedListStateMeta extends Equatable {
   // current page, start from 1
   final int currentPage;
 
@@ -86,7 +86,7 @@ class ULStateMeta extends Equatable {
   // has reached end
   final bool hasReachedEnd;
 
-  ULStateMeta({
+  UnlimitedListStateMeta({
     this.currentPage = 0, // start from page 0 (no fetching yet)
     this.perPage = 20,
     this.fetchedAt = '',
@@ -96,7 +96,7 @@ class ULStateMeta extends Equatable {
     this.hasReachedEnd = false,
   });
 
-  ULStateMeta copyWith({
+  UnlimitedListStateMeta copyWith({
     int currentPage,
     int perPage,
     String fetchedAt,
@@ -105,7 +105,7 @@ class ULStateMeta extends Equatable {
     String sort,
     bool hasReachedEnd,
   }) {
-    return ULStateMeta(
+    return UnlimitedListStateMeta(
       currentPage: currentPage ?? this.currentPage,
       perPage: perPage ?? this.perPage,
       fetchedAt: fetchedAt ?? this.fetchedAt,
@@ -126,9 +126,4 @@ class ULStateMeta extends Equatable {
         sort,
         hasReachedEnd,
       ];
-
-  @override
-  String toString() {
-    return 'ULStateMeta{currentPage: $currentPage, perPage: $perPage, fetchedAt: $fetchedAt, searchQuery: $searchQuery, orderBy: $orderBy, sort: $sort, hasReachedEnd: $hasReachedEnd}';
-  }
 }

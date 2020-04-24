@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc.dart';
 import 'request.dart';
 
-class FSBlocProvider<R, U extends FSUseCase<R>>
-    extends BlocProvider<FSBloc<R, U>> {
+class FSBlocProvider<R, U extends FormSubmitUseCase<R>>
+    extends BlocProvider<FormSubmitBloc<R, U>> {
   FSBlocProvider({
     /// Use case builder
     @required U Function(BuildContext context) useCase,
@@ -14,7 +14,7 @@ class FSBlocProvider<R, U extends FSUseCase<R>>
   })  : assert(useCase != null),
         super(
           create: (BuildContext context) {
-            return FSBloc<R, U>(
+            return FormSubmitBloc<R, U>(
               useCase: useCase(context),
             );
           },

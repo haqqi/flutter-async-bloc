@@ -6,7 +6,7 @@ import 'event.dart';
 import 'request.dart';
 import 'state.dart';
 
-class FSBloc<R, U extends FSUseCase<R>> extends Bloc<FSEvent, FSState> {
+class FormSubmitBloc<R, U extends FormSubmitUseCase<R>> extends Bloc<FormSubmitEvent, FormSubmitState> {
   // use case of form submit
   final U useCase;
 
@@ -14,18 +14,18 @@ class FSBloc<R, U extends FSUseCase<R>> extends Bloc<FSEvent, FSState> {
   /// do anything regarding unfinished response.
   bool _isAvailable = true;
 
-  FSBloc({
+  FormSubmitBloc({
     @required this.useCase,
   })  : assert(useCase != null),
         super();
 
   @override
-  FSState get initialState => FSInitState();
+  FormSubmitState get initialState => FormSubmitInitState();
 
   @override
-  Stream<FSState> mapEventToState(FSEvent event) async* {
-    if (event is FSSendEvent) {
-      yield FSSendingState();
+  Stream<FormSubmitState> mapEventToState(FormSubmitEvent event) async* {
+    if (event is FormSubmitSendEvent) {
+      yield FormSubmitSendingState();
 
       AsyncResponse<R> response = await useCase.send();
 
@@ -34,7 +34,7 @@ class FSBloc<R, U extends FSUseCase<R>> extends Bloc<FSEvent, FSState> {
         return;
       }
 
-      yield FSDoneState<R>(
+      yield FormSubmitDoneState<R>(
         response: response,
       );
     }

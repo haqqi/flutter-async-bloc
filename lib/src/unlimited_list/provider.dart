@@ -5,8 +5,8 @@ import 'bloc.dart';
 import 'event.dart';
 import 'request.dart';
 
-class ULBlocProvider<M, U extends ULUseCase<M>>
-    extends BlocProvider<ULBloc<M, U>> {
+class ULBlocProvider<M, U extends UnlimitedListUseCase<M>>
+    extends BlocProvider<UnlimitedListBloc<M, U>> {
   ULBlocProvider({
     @required U Function(BuildContext context) useCase,
     Widget child,
@@ -14,9 +14,9 @@ class ULBlocProvider<M, U extends ULUseCase<M>>
   })  : assert(useCase != null),
         super(
           create: (BuildContext context) {
-            return ULBloc(
+            return UnlimitedListBloc(
               useCase: useCase(context),
-            )..add(ULFetchEvent());
+            )..add(UnlimitedListFetchEvent());
           },
           child: child,
           key: key,

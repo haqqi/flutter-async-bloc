@@ -11,7 +11,8 @@ import 'state.dart';
 /// builder for the widget
 typedef ListTileBuilder<M> = Widget Function(BuildContext context, M model);
 
-class ULWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
+class UnlimitedListWidget<M, U extends UnlimitedListUseCase<M>>
+    extends StatelessWidget {
   /// List tile builder that has parameter of [M]
   final ListTileBuilder<M> listTileBuilder;
 
@@ -34,7 +35,7 @@ class ULWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
   /// Padding for the list view
   final EdgeInsetsGeometry padding;
 
-  ULWidget({
+  UnlimitedListWidget({
     @required this.listTileBuilder,
     @required this.separatorBuilder,
     this.loadingBuilder,
@@ -49,11 +50,12 @@ class ULWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ULBloc<M, U> bloc = BlocProvider.of<ULBloc<M, U>>(context);
+    final UnlimitedListBloc<M, U> bloc =
+        BlocProvider.of<UnlimitedListBloc<M, U>>(context);
 
-    return BlocBuilder<ULBloc<M, U>, ULState<M>>(
+    return BlocBuilder<UnlimitedListBloc<M, U>, UnlimitedListState<M>>(
       bloc: bloc,
-      builder: (BuildContext context, ULState<M> state) {
+      builder: (BuildContext context, UnlimitedListState<M> state) {
         Widget effectiveWidget;
 
         // if the data is still empty
@@ -104,7 +106,7 @@ class ULWidget<M, U extends ULUseCase<M>> extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () async {
             // refresh event
-            bloc.add(ULRefreshEvent());
+            bloc.add(UnlimitedListRefreshEvent());
           },
           child: effectiveWidget,
         );

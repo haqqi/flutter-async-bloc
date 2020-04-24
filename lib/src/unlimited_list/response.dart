@@ -5,23 +5,23 @@ import '../common/response.dart';
 
 /// Unlimited list response with list of data and meta
 @immutable
-class ULResponse<M> extends AsyncResponse<List<M>> {
+class UnlimitedListResponse<M> extends AsyncResponse<List<M>> {
   /// the meta
-  final ULResponseMeta meta;
+  final UnlimitedListResponseMeta meta;
 
-  ULResponse.success({
+  UnlimitedListResponse.success({
     @required List<M> data,
     @required this.meta,
   }) : super.success(data);
 
-  ULResponse.error({
+  UnlimitedListResponse.error({
     @required AsyncError error,
   })  : meta = null,
         super.error(error);
 }
 
 @immutable
-class ULResponseMeta extends Equatable {
+class UnlimitedListResponseMeta extends Equatable {
   // response from server
   final int totalPage;
 
@@ -31,7 +31,7 @@ class ULResponseMeta extends Equatable {
   // fetched at
   final String fetchedAt;
 
-  ULResponseMeta({
+  UnlimitedListResponseMeta({
     @required this.totalPage,
     @required this.totalItem,
     @required this.fetchedAt,

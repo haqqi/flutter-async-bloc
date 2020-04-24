@@ -1,5 +1,5 @@
 import '../common/response.dart';
 
-abstract class SRUseCase<R> {
+abstract class SingleRequestUseCase<R> {
   Future<AsyncResponse<R>> fetch();
 }

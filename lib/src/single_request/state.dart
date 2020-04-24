@@ -4,25 +4,23 @@ import 'package:meta/meta.dart';
 import '../common/response.dart';
 
 @immutable
-abstract class SRState extends Equatable {
-  const SRState();
+abstract class SingleRequestState extends Equatable {
+  const SingleRequestState();
 
   @override
-  List<Object> get props => [
-        runtimeType,
-      ];
+  List<Object> get props => [];
 }
 
 @immutable
-class SRInitState extends SRState {
-  const SRInitState();
+class SingleRequestInitState extends SingleRequestState {
+  const SingleRequestInitState();
 }
 
 @immutable
-class SRFetchingState<R> extends SRState {
+class SingleRequestFetchingState<R> extends SingleRequestState {
   final R previousResult;
 
-  const SRFetchingState({
+  const SingleRequestFetchingState({
     this.previousResult,
   });
 
@@ -35,10 +33,10 @@ class SRFetchingState<R> extends SRState {
 }
 
 @immutable
-class SRDoneState<R> extends SRState {
+class SingleRequestDoneState<R> extends SingleRequestState {
   final AsyncResponse<R> response;
 
-  const SRDoneState({
+  const SingleRequestDoneState({
     @required this.response,
   });
 

@@ -1,26 +1,24 @@
 import 'package:equatable/equatable.dart';
 
 // base event
-abstract class ULEvent extends Equatable {
-  const ULEvent();
+abstract class UnlimitedListEvent extends Equatable {
+  const UnlimitedListEvent();
 
   @override
-  List<Object> get props => [
-        runtimeType,
-      ];
+  List<Object> get props => [];
 }
 
 // fetching, must bring the meta
-class ULFetchEvent extends ULEvent {}
+class UnlimitedListFetchEvent extends UnlimitedListEvent {}
 
 /// Refresh the page by using refresh indicator
-class ULRefreshEvent extends ULEvent {}
+class UnlimitedListRefreshEvent extends UnlimitedListEvent {}
 
 /// Submit new search query
-class ULSubmitSearchEvent extends ULEvent {
+class UnlimitedListSearchEvent extends UnlimitedListEvent {
   final String searchQuery;
 
-  ULSubmitSearchEvent({
+  UnlimitedListSearchEvent({
     this.searchQuery,
   });
 

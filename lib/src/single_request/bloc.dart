@@ -6,7 +6,8 @@ import 'event.dart';
 import 'request.dart';
 import 'state.dart';
 
-class SRBloc<R, U extends SRUseCase<R>> extends Bloc<SREvent, SRState> {
+class SingleRequestBloc<R, U extends SingleRequestUseCase<R>>
+    extends Bloc<SingleRequestEvent, SingleRequestState> {
   /// use case of fetching
   final U useCase;
 
@@ -17,28 +18,28 @@ class SRBloc<R, U extends SRUseCase<R>> extends Bloc<SREvent, SRState> {
   /// Clean result to display full page loading screen
   final bool clearResultOnRefresh;
 
-  SRBloc({
+  SingleRequestBloc({
     @required this.useCase,
     this.clearResultOnRefresh = true,
   })  : assert(useCase != null),
         super();
 
   @override
-  SRState get initialState => SRInitState();
+  SingleRequestState get initialState => SingleRequestInitState();
 
   @override
-  Stream<SRState> mapEventToState(SREvent event) async* {
+  Stream<SingleRequestState> mapEventToState(SingleRequestEvent event) async* {
     // if the event is fetching
-    if (event is SRFetchEvent) {
+    if (event is SingleRequestFetchEvent) {
       // catching previous result
       R previousResult;
 
       // if the previous state is done state
-      if (state is SRDoneState<R> && !clearResultOnRefresh) {
-        previousResult = (state as SRDoneState<R>).response.data;
+      if (state is SingleRequestDoneState<R> && !clearResultOnRefresh) {
+        previousResult = (state as SingleRequestDoneState<R>).response.data;
       }
 
-      yield SRFetchingState<R>(
+      yield SingleRequestFetchingState<R>(
         previousResult: previousResult,
       );
 
@@ -49,7 +50,7 @@ class SRBloc<R, U extends SRUseCase<R>> extends Bloc<SREvent, SRState> {
         return;
       }
 
-      yield SRDoneState<R>(
+      yield SingleRequestDoneState<R>(
         response: response,
       );
     }

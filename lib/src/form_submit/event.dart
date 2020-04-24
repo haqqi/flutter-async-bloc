@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class FSEvent extends Equatable {
-  const FSEvent();
+abstract class FormSubmitEvent extends Equatable {
+  const FormSubmitEvent();
 
   @override
   List<Object> get props => [
@@ -11,6 +11,6 @@ abstract class FSEvent extends Equatable {
       ];
 }
 
-class FSSendEvent extends FSEvent {
-  const FSSendEvent();
+class FormSubmitSendEvent extends FormSubmitEvent {
+  const FormSubmitSendEvent();
 }

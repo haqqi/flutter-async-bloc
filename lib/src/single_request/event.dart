@@ -2,16 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class SREvent extends Equatable {
-  const SREvent();
+abstract class SingleRequestEvent extends Equatable {
+  const SingleRequestEvent();
 
   @override
-  List<Object> get props => [
-        runtimeType,
-      ];
+  List<Object> get props => [];
 }
 
 @immutable
-class SRFetchEvent extends SREvent {
-  const SRFetchEvent();
+class SingleRequestFetchEvent extends SingleRequestEvent {
+  const SingleRequestFetchEvent();
 }

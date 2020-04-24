@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../common/response.dart';
 
-abstract class FSUseCase<R> {
+abstract class FormSubmitUseCase<R> {
   /// Global key to handle the form state. Useful for handling validation
   /// and submission.
   ///

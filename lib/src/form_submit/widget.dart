@@ -1,31 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../common/response.dart';
+import '../common/callback.dart';
 import 'bloc.dart';
 import 'event.dart';
 import 'request.dart';
 import 'state.dart';
 
-/// Type definition for async response callback success that has build context
-///
-typedef FSSuccessCallback<R> = void Function(
-  BuildContext context,
-  R data,
-);
-
-/// Type definition for async response callback error that has build context
-///
-typedef FSErrorCallback = void Function(
-  BuildContext context,
-  AsyncError error,
-);
-
-class FSWidget<R, U extends FSUseCase<R>> extends StatelessWidget {
+class FormSubmitWidget<R, U extends FormSubmitUseCase<R>>
+    extends StatelessWidget {
   /// form builder of the use case
   final Widget Function(BuildContext context, U useCase) formBuilder;
 
-  FSWidget({
+  FormSubmitWidget({
     @required this.formBuilder,
     Key key,
   })  : assert(formBuilder != null),
@@ -33,7 +20,8 @@ class FSWidget<R, U extends FSUseCase<R>> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FSBloc<R, U> bloc = BlocProvider.of<FSBloc<R, U>>(context);
+    final FormSubmitBloc<R, U> bloc =
+        BlocProvider.of<FormSubmitBloc<R, U>>(context);
 
     return Form(
       key: bloc.useCase.formKey,
@@ -42,15 +30,15 @@ class FSWidget<R, U extends FSUseCase<R>> extends StatelessWidget {
   }
 }
 
-class FSButton<R, U extends FSUseCase<R>> extends StatelessWidget {
+class FSButton<R, U extends FormSubmitUseCase<R>> extends StatelessWidget {
   /// if this is defined, we catch the sending blocking
   final WidgetBuilder blockLoader;
 
   /// Success callback
-  final FSSuccessCallback<R> onSuccess;
+  final OnSuccessCallback<R> onSuccess;
 
   /// Success callback
-  final FSErrorCallback onError;
+  final OnErrorCallback onError;
 
   final Widget Function(BuildContext context, GestureTapCallback send) builder;
 
@@ -65,13 +53,14 @@ class FSButton<R, U extends FSUseCase<R>> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FSBloc<R, U> bloc = BlocProvider.of<FSBloc<R, U>>(context);
+    final FormSubmitBloc<R, U> bloc =
+        BlocProvider.of<FormSubmitBloc<R, U>>(context);
 
-    return BlocListener<FSBloc<R, U>, FSState>(
+    return BlocListener<FormSubmitBloc<R, U>, FormSubmitState>(
       bloc: bloc,
-      listener: (BuildContext context, FSState state) {
+      listener: (BuildContext context, FormSubmitState state) {
         // loader listener
-        if (state is FSSendingState) {
+        if (state is FormSubmitSendingState) {
           if (blockLoader != null) {
             // show dialog
             showDialog(
@@ -81,7 +70,7 @@ class FSButton<R, U extends FSUseCase<R>> extends StatelessWidget {
             );
           }
         }
-        if (state is FSDoneState<R>) {
+        if (state is FormSubmitDoneState<R>) {
           if (blockLoader != null) {
             // pop the dialog
             Navigator.of(context).pop();
@@ -99,14 +88,14 @@ class FSButton<R, U extends FSUseCase<R>> extends StatelessWidget {
           }
         }
       },
-      child: BlocBuilder<FSBloc<R, U>, FSState>(
+      child: BlocBuilder<FormSubmitBloc<R, U>, FormSubmitState>(
         bloc: bloc,
-        builder: (BuildContext context, FSState state) {
+        builder: (BuildContext context, FormSubmitState state) {
           GestureTapCallback onTap;
 
-          if (!(state is FSSendingState)) {
+          if (!(state is FormSubmitSendingState)) {
             onTap = () async {
-              bloc.add(FSSendEvent());
+              bloc.add(FormSubmitSendEvent());
             };
           }
 

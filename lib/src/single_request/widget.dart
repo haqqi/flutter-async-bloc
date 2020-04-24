@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../common/callback.dart';
 import '../common/response.dart';
 import '../common/widget.dart';
 import 'bloc.dart';
@@ -9,22 +10,9 @@ import 'event.dart';
 import 'request.dart';
 import 'state.dart';
 
-/// Type definition for async response callback success that has build context
-///
-typedef SRSuccessCallback<R> = void Function(
-  BuildContext context,
-  R data,
-);
-
-/// Type definition for async response callback error that has build context
-///
-typedef SRErrorCallback = void Function(
-  BuildContext context,
-  AsyncError error,
-);
-
 /// Single request widget, to display the result after done event.
-class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
+class SingleRequestResultWidget<R, U extends SingleRequestUseCase<R>>
+    extends StatelessWidget {
   /// Builder of the result
   final Widget Function(BuildContext context, R result) resultBuilder;
 
@@ -35,7 +23,7 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
   final Widget Function(BuildContext context, AsyncError error)
       errorResultBuilder;
 
-  SRWidget({
+  SingleRequestResultWidget({
     @required this.resultBuilder,
     this.loadingBuilder,
     this.errorResultBuilder,
@@ -45,12 +33,12 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SRBloc<R, U> bloc = BlocProvider.of<SRBloc<R, U>>(context);
+    final SingleRequestBloc<R, U> bloc = BlocProvider.of<SingleRequestBloc<R, U>>(context);
 
-    return BlocBuilder<SRBloc<R, U>, SRState>(
+    return BlocBuilder<SingleRequestBloc<R, U>, SingleRequestState>(
       bloc: bloc,
-      builder: (BuildContext context, SRState state) {
-        if (state is SRFetchingState<R>) {
+      builder: (BuildContext context, SingleRequestState state) {
+        if (state is SingleRequestFetchingState<R>) {
           // if has previous result, return the result
           if (state.hasPreviousResult) {
             return resultBuilder(context, state.previousResult);
@@ -63,7 +51,7 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
         }
 
         // assume the other is done state
-        else if (state is SRDoneState<R>) {
+        else if (state is SingleRequestDoneState<R>) {
           Widget effectiveWidget;
 
           if (state.response.hasError) {
@@ -77,7 +65,7 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () async {
-              bloc.add(SRFetchEvent());
+              bloc.add(SingleRequestFetchEvent());
             },
             child: effectiveWidget,
           );
@@ -93,13 +81,13 @@ class SRWidget<R, U extends SRUseCase<R>> extends StatelessWidget {
   }
 }
 
-class SROnDoneListener<R, U extends SRUseCase<R>>
+class SingleRequestOnDoneListener<R, U extends SingleRequestUseCase<R>>
     extends SingleChildStatelessWidget {
   /// Success callback
-  final SRSuccessCallback<R> onSuccess;
-  final SRErrorCallback onError;
+  final OnSuccessCallback<R> onSuccess;
+  final OnErrorCallback onError;
 
-  SROnDoneListener({
+  SingleRequestOnDoneListener({
     this.onSuccess,
     this.onError,
     Widget child,
@@ -112,12 +100,12 @@ class SROnDoneListener<R, U extends SRUseCase<R>>
 
   @override
   Widget buildWithChild(BuildContext context, Widget child) {
-    final SRBloc<R, U> bloc = BlocProvider.of<SRBloc<R, U>>(context);
+    final SingleRequestBloc<R, U> bloc = BlocProvider.of<SingleRequestBloc<R, U>>(context);
 
-    return BlocListener<SRBloc<R, U>, SRState>(
+    return BlocListener<SingleRequestBloc<R, U>, SingleRequestState>(
       bloc: bloc,
-      listener: (BuildContext context, SRState state) {
-        if (state is SRDoneState<R>) {
+      listener: (BuildContext context, SingleRequestState state) {
+        if (state is SingleRequestDoneState<R>) {
           if (state.response.hasData && onSuccess != null) {
             onSuccess(context, state.response.data);
           } else if (state.response.hasError && onError != null) {
@@ -125,8 +113,8 @@ class SROnDoneListener<R, U extends SRUseCase<R>>
           }
         }
       },
-      condition: (SRState prevState, SRState currentState) {
-        return (currentState is SRDoneState<R>);
+      condition: (SingleRequestState prevState, SingleRequestState currentState) {
+        return (currentState is SingleRequestDoneState<R>);
       },
       child: child,
     );

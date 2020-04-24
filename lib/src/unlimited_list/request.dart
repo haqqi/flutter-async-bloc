@@ -4,12 +4,12 @@ import 'package:meta/meta.dart';
 import 'response.dart';
 import 'state.dart';
 
-abstract class ULUseCase<M> {
+abstract class UnlimitedListUseCase<M> {
   /// Send the request and return the data of [D]
-  Future<ULResponse<M>> fetch(ULRequestMeta meta);
+  Future<UnlimitedListResponse<M>> fetch(UnlimitedListRequestMeta meta);
 }
 
-class ULRequestMeta extends Equatable {
+class UnlimitedListRequestMeta extends Equatable {
   final int page;
   final int perPage;
   final String fetchedAt;
@@ -17,7 +17,7 @@ class ULRequestMeta extends Equatable {
   final String orderBy;
   final String sort;
 
-  ULRequestMeta({
+  UnlimitedListRequestMeta({
     @required this.page,
     @required this.perPage,
     @required this.fetchedAt,
@@ -26,7 +26,7 @@ class ULRequestMeta extends Equatable {
     @required this.sort,
   });
 
-  ULRequestMeta.nextPage(ULStateMeta stateMeta)
+  UnlimitedListRequestMeta.nextPage(UnlimitedListStateMeta stateMeta)
       : this(
           page: stateMeta.currentPage + 1,
           perPage: stateMeta.perPage,

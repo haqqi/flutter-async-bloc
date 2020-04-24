@@ -5,28 +5,28 @@ import '../common/response.dart';
 
 // base state
 @immutable
-abstract class FSState extends Equatable {
-  const FSState();
+abstract class FormSubmitState extends Equatable {
+  const FormSubmitState();
 
   @override
   List<Object> get props => [];
 }
 
 @immutable
-class FSInitState extends FSState {
-  const FSInitState();
+class FormSubmitInitState extends FormSubmitState {
+  const FormSubmitInitState();
 }
 
 @immutable
-class FSSendingState extends FSState {
-  const FSSendingState();
+class FormSubmitSendingState extends FormSubmitState {
+  const FormSubmitSendingState();
 }
 
 @immutable
-class FSDoneState<R> extends FSState {
+class FormSubmitDoneState<R> extends FormSubmitState {
   final AsyncResponse<R> response;
 
-  const FSDoneState({
+  const FormSubmitDoneState({
     @required this.response,
   });
 

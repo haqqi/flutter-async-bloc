@@ -7,7 +7,7 @@ import 'request.dart';
 import 'response.dart';
 import "state.dart";
 
-class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
+class UnlimitedListBloc<M, U extends UnlimitedListUseCase<M>> extends Bloc<UnlimitedListEvent, UnlimitedListState<M>> {
   // use case of fetching
   final U useCase;
 
@@ -17,7 +17,7 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
   /// do anything regarding unfinished response.
   bool _isAvailable = true;
 
-  ULBloc({
+  UnlimitedListBloc({
     @required this.useCase,
   })  : assert(useCase != null),
         super() {
@@ -26,18 +26,18 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
   }
 
   @override
-  ULState<M> get initialState => ULState<M>();
+  UnlimitedListState<M> get initialState => UnlimitedListState<M>();
 
   @override
-  Stream<ULState<M>> mapEventToState(ULEvent event) async* {
-    if (event is ULFetchEvent) {
+  Stream<UnlimitedListState<M>> mapEventToState(UnlimitedListEvent event) async* {
+    if (event is UnlimitedListFetchEvent) {
       // pipe next page fetching
       yield* _fetchNextPage();
-    } else if (event is ULRefreshEvent) {
+    } else if (event is UnlimitedListRefreshEvent) {
       // yield reset data first
       yield state.copyWith(
         data: state.data..clear(),
-        meta: ULStateMeta().copyWith(
+        meta: UnlimitedListStateMeta().copyWith(
           perPage: state.meta.perPage,
           searchQuery: state.meta.searchQuery,
           orderBy: state.meta.orderBy,
@@ -46,11 +46,11 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
       );
       // pipe next page fetching
       yield* _fetchNextPage();
-    } else if (event is ULSubmitSearchEvent) {
+    } else if (event is UnlimitedListSearchEvent) {
       // yield reset data first
       yield state.copyWith(
         data: state.data..clear(), // clear the data
-        meta: ULStateMeta().copyWith(
+        meta: UnlimitedListStateMeta().copyWith(
           perPage: state.meta.perPage,
           searchQuery: event.searchQuery, // cha
           orderBy: state.meta.orderBy,
@@ -63,7 +63,7 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
   }
 
   // fetch next page
-  Stream<ULState<M>> _fetchNextPage() async* {
+  Stream<UnlimitedListState<M>> _fetchNextPage() async* {
     // yield is fetching
     yield state.copyWith(
       isFetching: true,
@@ -71,8 +71,8 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
     );
 
     // fetch the response
-    ULResponse<M> response = await useCase.fetch(
-      ULRequestMeta.nextPage(
+    UnlimitedListResponse<M> response = await useCase.fetch(
+      UnlimitedListRequestMeta.nextPage(
         state.meta,
       ),
     );
@@ -116,7 +116,7 @@ class ULBloc<M, U extends ULUseCase<M>> extends Bloc<ULEvent, ULState<M>> {
     if (maxScroll - currentScroll <= 200) {
       // only fetch if it is not fetching and has not reached end
       if (!state.isFetching && !state.meta.hasReachedEnd) {
-        add(ULFetchEvent());
+        add(UnlimitedListFetchEvent());
       }
     }
   }
