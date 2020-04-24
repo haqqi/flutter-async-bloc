@@ -114,3 +114,36 @@ class UnlimitedListWidget<M, U extends UnlimitedListUseCase<M>>
     );
   }
 }
+
+class UnlimitedListRefreshButton<R, U extends UnlimitedListUseCase<R>>
+    extends StatelessWidget {
+  // button builder with provided refresg call back
+  final Widget Function(BuildContext context, GestureTapCallback refresh) builder;
+
+  UnlimitedListRefreshButton({
+    @required this.builder,
+    Key key,
+  })  : assert(builder != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final UnlimitedListBloc<R, U> bloc =
+        BlocProvider.of<UnlimitedListBloc<R, U>>(context);
+
+    return BlocBuilder<UnlimitedListBloc<R, U>, UnlimitedListState>(
+      bloc: bloc,
+      builder: (BuildContext context, UnlimitedListState state) {
+        GestureTapCallback onTap;
+
+        if (!state.isFetching) {
+          onTap = () async {
+            bloc.add(UnlimitedListRefreshEvent());
+          };
+        }
+
+        return builder(context, onTap);
+      },
+    );
+  }
+}

@@ -49,7 +49,8 @@ class FormSubmitButton<R, U extends FormSubmitUseCase<R>>
     this.onError,
     this.blockLoader,
     Key key,
-  })  : assert(onSuccess != null),
+  })  : assert(builder != null),
+        assert(onSuccess != null),
         super(key: key);
 
   @override
