@@ -5,9 +5,9 @@ import 'bloc.dart';
 import 'event.dart';
 import 'request.dart';
 
-class ULBlocProvider<M, U extends UnlimitedListUseCase<M>>
+class UnlimitedListBlocProvider<M, U extends UnlimitedListUseCase<M>>
     extends BlocProvider<UnlimitedListBloc<M, U>> {
-  ULBlocProvider({
+  UnlimitedListBlocProvider({
     @required U Function(BuildContext context) useCase,
     Widget child,
     Key key,

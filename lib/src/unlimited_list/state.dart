@@ -55,11 +55,6 @@ class UnlimitedListState<M> extends Equatable {
         data.length,
         meta,
       ];
-
-  @override
-  String toString() {
-    return 'ULState<{$M}>{isFetching: $isFetching, error: $error, data: $data, meta: $meta}';
-  }
 }
 
 /// Unlimited state meta
