@@ -58,6 +58,14 @@ class FormSubmitState<F, R> extends Equatable {
     );
   }
 
+  FormSubmitState<F, R> markDone(AsyncResponse<R> response) {
+    return FormSubmitState<F, R>._(
+      formData: formData,
+      isSending: false,
+      response: response,
+    );
+  }
+
   @override
   List<Object> get props => [
         response,

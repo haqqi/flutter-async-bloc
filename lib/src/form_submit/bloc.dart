@@ -6,17 +6,25 @@ import 'event.dart';
 import 'state.dart';
 import 'usecase.dart';
 
-/// [Response] return type declaration of the use case
-/// [State] state type declaration
-abstract class FormSubmitBloc<Response, State extends FormSubmitState<Response>>
-    extends Bloc<FormSubmitEvent, State> {
+/// [R] return type declaration of the use case
+/// [F] form data representation
+class FormSubmitBloc<F, R>
+    extends Bloc<FormSubmitEvent, FormSubmitState<F, R>> {
   /// use case for sending the data
-  final FormSubmitUseCase<Response, State> useCase;
+  final FormSubmitUseCase<F, R> useCase;
 
   /// just a flag to prevent state update
   bool _isAvailable = true;
 
-  FormSubmitBloc(this.useCase);
+  /// temporary form
+  final F _form;
+
+  FormSubmitBloc({
+    @required this.useCase,
+    @required F form,
+  })  : assert(useCase != null),
+        assert(form != null),
+        _form = form;
 
   @override
   Future<void> close() {
@@ -27,17 +35,18 @@ abstract class FormSubmitBloc<Response, State extends FormSubmitState<Response>>
   }
 
   @override
-  State get initialState;
+  FormSubmitState<F, R> get initialState =>
+      FormSubmitState<F, R>.init(formData: _form);
 
   @override
   @mustCallSuper
-  Stream<State> mapEventToState(FormSubmitEvent event) async* {
+  Stream<FormSubmitState<F, R>> mapEventToState(FormSubmitEvent event) async* {
     if (event is FormSubmitSendEvent) {
       // yield sending first
       yield state.markSending();
 
       /// do the call
-      AsyncResponse<Response> result = await useCase.send(state);
+      AsyncResponse<R> result = await useCase.send(state.formData);
 
       if (!_isAvailable) {
         return;

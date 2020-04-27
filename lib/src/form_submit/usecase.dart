@@ -1,8 +1,7 @@
 import '../common/response.dart';
-import 'state.dart';
 
-/// Interface for async form use case
-abstract class FormSubmitUseCase<Response,
-    Form extends FormSubmitState<Response>> {
-  Future<AsyncResponse<Response>> send(Form form);
+/// Representation of a form use case, with the return of [R] as [AsyncResponse]
+/// It also contains [F] who hold form data.
+abstract class FormSubmitUseCase<F, R> {
+  Future<AsyncResponse<R>> send(F form);
 }
