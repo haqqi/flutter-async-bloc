@@ -4,13 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../common/callback.dart';
 import 'bloc.dart';
 import 'event.dart';
-import 'request.dart';
 import 'state.dart';
 
-class FormSubmitWidget<R, U extends FormSubmitUseCase<R>>
+class FormSubmitWidget<F, R, B extends FormSubmitBloc<F, R>>
     extends StatelessWidget {
   /// form builder of the use case
-  final Widget Function(BuildContext context, U useCase) formBuilder;
+  final Widget Function(BuildContext context, F form) formBuilder;
 
   FormSubmitWidget({
     @required this.formBuilder,
@@ -20,17 +19,16 @@ class FormSubmitWidget<R, U extends FormSubmitUseCase<R>>
 
   @override
   Widget build(BuildContext context) {
-    final FormSubmitBloc<R, U> bloc =
-        BlocProvider.of<FormSubmitBloc<R, U>>(context);
+    final B bloc = BlocProvider.of<B>(context);
 
     return Form(
       key: bloc.useCase.formKey,
-      child: formBuilder(context, bloc.useCase),
+      child: formBuilder(context, bloc.state.formData),
     );
   }
 }
 
-class FormSubmitButton<R, U extends FormSubmitUseCase<R>>
+class FormSubmitButton<F, R, B extends FormSubmitBloc<F, R>>
     extends StatelessWidget {
   /// if this is defined, we catch the sending blocking
   final WidgetBuilder blockLoader;
@@ -43,9 +41,12 @@ class FormSubmitButton<R, U extends FormSubmitUseCase<R>>
 
   final Widget Function(BuildContext context, GestureTapCallback send) builder;
 
+  final bool Function(F form) canSubmit;
+
   FormSubmitButton({
     @required this.builder,
     @required this.onSuccess,
+    this.canSubmit,
     this.onError,
     this.blockLoader,
     Key key,
@@ -55,14 +56,13 @@ class FormSubmitButton<R, U extends FormSubmitUseCase<R>>
 
   @override
   Widget build(BuildContext context) {
-    final FormSubmitBloc<R, U> bloc =
-        BlocProvider.of<FormSubmitBloc<R, U>>(context);
+    final B bloc = BlocProvider.of<B>(context);
 
-    return BlocListener<FormSubmitBloc<R, U>, FormSubmitState>(
+    return BlocListener<B, FormSubmitState<F, R>>(
       bloc: bloc,
-      listener: (BuildContext context, FormSubmitState state) {
+      listener: (BuildContext context, FormSubmitState<F, R> state) {
         // loader listener
-        if (state is FormSubmitSendingState) {
+        if (state.isSending) {
           if (blockLoader != null) {
             // show dialog
             showDialog(
@@ -72,7 +72,8 @@ class FormSubmitButton<R, U extends FormSubmitUseCase<R>>
             );
           }
         }
-        if (state is FormSubmitDoneState<R>) {
+
+        if (!state.isSending) {
           if (blockLoader != null) {
             // pop the dialog
             Navigator.of(context).pop();
@@ -90,18 +91,30 @@ class FormSubmitButton<R, U extends FormSubmitUseCase<R>>
           }
         }
       },
-      child: BlocBuilder<FormSubmitBloc<R, U>, FormSubmitState>(
+      condition: (FormSubmitState<F, R> prevState,
+          FormSubmitState<F, R> currentState) {
+        return (prevState.isSending != currentState.isSending);
+      },
+      child: BlocBuilder<B, FormSubmitState<F, R>>(
         bloc: bloc,
-        builder: (BuildContext context, FormSubmitState state) {
-          GestureTapCallback onTap;
-
-          if (!(state is FormSubmitSendingState)) {
-            onTap = () async {
-              bloc.add(FormSubmitSendEvent());
-            };
+        builder: (BuildContext context, FormSubmitState<F, R> state) {
+          // can only submit if not sending
+          if (state.isSending) {
+            return builder(context, null);
           }
 
-          return builder(context, onTap);
+          // if can submit is not defined, we can submit
+          if (canSubmit == null || canSubmit(state.formData)) {
+            return builder(
+              context,
+              () async {
+                bloc.add(FormSubmitSendEvent());
+              },
+            );
+          }
+
+          // otherwise, cannot submit
+          return builder(context, null);
         },
       ),
     );
