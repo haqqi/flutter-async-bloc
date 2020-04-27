@@ -46,7 +46,7 @@ class FormSubmitBloc<F, R>
       yield state.markSending();
 
       /// do the call
-      AsyncResponse<R> result = await useCase.send(state.formData);
+      AsyncResponse<R> result = await useCase.sendInternal(state.formData);
 
       if (!_isAvailable) {
         return;
