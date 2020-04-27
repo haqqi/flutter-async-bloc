@@ -6,9 +6,7 @@ abstract class FormSubmitEvent extends Equatable {
   const FormSubmitEvent();
 
   @override
-  List<Object> get props => [
-        runtimeType,
-      ];
+  List<Object> get props => [];
 }
 
 class FormSubmitSendEvent extends FormSubmitEvent {

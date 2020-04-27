@@ -1,37 +1,26 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/widgets.dart';
 
 import '../common/response.dart';
 
-// base state
+/// Representation of a form state, with the return of T once the submission has
+/// done. We reuse the [AsyncSnapshot] library from flutter
 @immutable
-abstract class FormSubmitState extends Equatable {
-  const FormSubmitState();
+abstract class FormSubmitState<Response> extends Equatable {
+  /// response once done
+  final AsyncResponse<Response> response;
 
-  @override
-  List<Object> get props => [];
-}
+  /// flag for sending
+  final bool isSending;
 
-@immutable
-class FormSubmitInitState extends FormSubmitState {
-  const FormSubmitInitState();
-}
+  FormSubmitState(
+    this.response,
+    this.isSending,
+  );
 
-@immutable
-class FormSubmitSendingState extends FormSubmitState {
-  const FormSubmitSendingState();
-}
+  /// Self return mark sending. Must change the isSending to true.
+  FormSubmitState<Response> markSending();
 
-@immutable
-class FormSubmitDoneState<R> extends FormSubmitState {
-  final AsyncResponse<R> response;
-
-  const FormSubmitDoneState({
-    @required this.response,
-  });
-
-  @override
-  List<Object> get props => [
-        response,
-      ];
+  /// Self return mark success. Must change the isSending to false.
+  FormSubmitState<Response> markDone(AsyncResponse<Response> response);
 }
