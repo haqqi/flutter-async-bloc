@@ -3,42 +3,20 @@ import 'package:meta/meta.dart';
 
 import '../common/response.dart';
 import 'event.dart';
-import 'request.dart';
 import 'state.dart';
+import 'usecase.dart';
 
-class FormSubmitBloc<R, U extends FormSubmitUseCase<R>> extends Bloc<FormSubmitEvent, FormSubmitState> {
-  // use case of form submit
-  final U useCase;
+/// [Response] return type declaration of the use case
+/// [State] state type declaration
+abstract class FormSubmitBloc<Response, State extends FormSubmitState<Response>>
+    extends Bloc<FormSubmitEvent, State> {
+  /// use case for sending the data
+  final FormSubmitUseCase<Response, State> useCase;
 
-  /// State for catching the availability. For example, after pop we don't
-  /// do anything regarding unfinished response.
+  /// just a flag to prevent state update
   bool _isAvailable = true;
 
-  FormSubmitBloc({
-    @required this.useCase,
-  })  : assert(useCase != null),
-        super();
-
-  @override
-  FormSubmitState get initialState => FormSubmitInitState();
-
-  @override
-  Stream<FormSubmitState> mapEventToState(FormSubmitEvent event) async* {
-    if (event is FormSubmitSendEvent) {
-      yield FormSubmitSendingState();
-
-      AsyncResponse<R> response = await useCase.send();
-
-      // if this bloc is unavailable anymore, no need to yield new state
-      if (!_isAvailable) {
-        return;
-      }
-
-      yield FormSubmitDoneState<R>(
-        response: response,
-      );
-    }
-  }
+  FormSubmitBloc(this.useCase);
 
   @override
   Future<void> close() {
@@ -46,5 +24,30 @@ class FormSubmitBloc<R, U extends FormSubmitUseCase<R>> extends Bloc<FormSubmitE
     _isAvailable = false;
 
     return super.close();
+  }
+
+  @override
+  State get initialState;
+
+  @override
+  @mustCallSuper
+  Stream<State> mapEventToState(FormSubmitEvent event) async* {
+    if (event is FormSubmitSendEvent) {
+      // yield sending first
+      yield state.markSending();
+
+      /// do the call
+      AsyncResponse<Response> result = await useCase.send(state);
+
+      if (!_isAvailable) {
+        return;
+      }
+
+      // yield it has done
+      yield state.markDone(result);
+
+      // do nothing later
+      return;
+    }
   }
 }
