@@ -16,11 +16,16 @@ class FormSubmitState<F, R> extends Equatable {
   /// flag for sending
   final bool isSending;
 
+  /// just a flag for static rebuild, since the formData cannot be changed
+  final int _rebuildCount;
+
   FormSubmitState._({
     this.formData,
     this.response = null,
     this.isSending = false,
-  }) : assert(formData != null);
+    int rebuildCount = 0,
+  })  : assert(formData != null),
+        _rebuildCount = rebuildCount;
 
   FormSubmitState.init({
     @required F formData,
@@ -34,6 +39,7 @@ class FormSubmitState<F, R> extends Equatable {
       formData: formData,
       isSending: true,
       response: null,
+      rebuildCount: _rebuildCount,
     );
   }
 
@@ -42,6 +48,16 @@ class FormSubmitState<F, R> extends Equatable {
       formData: formData,
       isSending: false,
       response: response,
+      rebuildCount: _rebuildCount,
+    );
+  }
+
+  FormSubmitState<F, R> rebuild() {
+    return FormSubmitState<F, R>._(
+      formData: formData,
+      isSending: false,
+      response: null,
+      rebuildCount: _rebuildCount + 1,
     );
   }
 
@@ -50,5 +66,23 @@ class FormSubmitState<F, R> extends Equatable {
         response,
         isSending,
         formData,
+        _rebuildCount,
       ];
+
+  @override
+  String toString() {
+    String text = '';
+
+    if (isSending) {
+      text += 'Sending State';
+    } else {
+      if (response == null) {
+        text += 'Waiting State >> ' + formData.toString();
+      } else {
+        text += 'Done State >> ' + (response.hasError ? 'error' : 'success');
+      }
+    }
+
+    return text;
+  }
 }

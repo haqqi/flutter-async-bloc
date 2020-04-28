@@ -23,7 +23,12 @@ class FormSubmitWidget<F, R, B extends FormSubmitBloc<F, R>>
 
     return Form(
       key: bloc.useCase.formKey,
-      child: formBuilder(context, bloc.state.formData),
+      child: BlocBuilder<B, FormSubmitState<F, R>>(
+        bloc: bloc,
+        builder: (BuildContext context, FormSubmitState<F, R> state) {
+          return formBuilder(context, state.formData);
+        },
+      ),
     );
   }
 }

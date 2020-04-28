@@ -24,7 +24,8 @@ class FormSubmitBloc<F, R>
     @required F form,
   })  : assert(useCase != null),
         assert(form != null),
-        _form = form;
+        _form = form,
+        super();
 
   @override
   Future<void> close() {
@@ -54,9 +55,6 @@ class FormSubmitBloc<F, R>
 
       // yield it has done
       yield state.markDone(result);
-
-      // do nothing later
-      return;
     }
   }
 }

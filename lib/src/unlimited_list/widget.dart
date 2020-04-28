@@ -117,7 +117,7 @@ class UnlimitedListWidget<M, U extends UnlimitedListUseCase<M>>
 
 class UnlimitedListRefreshButton<R, U extends UnlimitedListUseCase<R>>
     extends StatelessWidget {
-  // button builder with provided refresg call back
+  // button builder with provided refresh call back
   final Widget Function(BuildContext context, GestureTapCallback refresh) builder;
 
   UnlimitedListRefreshButton({
