@@ -8,9 +8,9 @@ abstract class AsyncFormState<F> extends Equatable {
   //. the payload
   final F form;
 
-  const AsyncFormState({
+  const AsyncFormState.mustCall({
     @required this.form,
-  });
+  }) : assert(form != null);
 
   @override
   List<Object> get props => [form];
@@ -19,13 +19,13 @@ abstract class AsyncFormState<F> extends Equatable {
 class AsyncFormReady<F> extends AsyncFormState<F> {
   const AsyncFormReady({
     @required F form,
-  }) : super(form: form);
+  }) : super.mustCall(form: form);
 }
 
 class AsyncFormSending<F> extends AsyncFormState<F> {
   const AsyncFormSending({
     @required F form,
-  }) : super(form: form);
+  }) : super.mustCall(form: form);
 }
 
 class AsyncFormDone<F, R> extends AsyncFormState<F> {
@@ -34,7 +34,7 @@ class AsyncFormDone<F, R> extends AsyncFormState<F> {
   AsyncFormDone({
     F form,
     this.response,
-  }) : super(form: form);
+  }) : super.mustCall(form: form);
 
   @override
   List<Object> get props => [form, response];
