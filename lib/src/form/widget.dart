@@ -127,7 +127,7 @@ class AsyncFormButton<F, R, B extends AsyncFormBloc<F, R>>
                 bloc.add(AsyncFormSend());
 
                 AsyncResponse<R> response =
-                    await useCase(context).send(state.form);
+                    await useCase(context).validateAndSend(state.form);
 
                 bloc.add(AsyncFormReceiveResponse<R>(response: response));
               },

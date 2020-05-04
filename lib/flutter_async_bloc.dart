@@ -14,6 +14,7 @@ export 'src/common/response.dart';
 export 'src/common/widget.dart';
 export 'src/form/bloc.dart';
 export 'src/form/event.dart';
+export 'src/form/mixin.dart';
 export 'src/form/state.dart';
 export 'src/form/usecase.dart';
 export 'src/form/widget.dart';
