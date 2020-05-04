@@ -7,8 +7,9 @@ import 'state.dart';
 class AsyncFormBloc<F, R> extends Bloc<AsyncFormEvent, AsyncFormState<F>> {
   final F _form;
 
-  AsyncFormBloc(F form)
-      : assert(form != null),
+  AsyncFormBloc({
+    @required F form,
+  })  : assert(form != null),
         _form = form,
         super();
 
