@@ -5,12 +5,11 @@ import 'mixin.dart';
 
 abstract class AsyncFormUseCase<F, R> {
   // use case id
-  final String _id;
+  final String useCaseId;
 
-  AsyncFormUseCase({
-    @required String useCaseId,
-  })  : assert(useCaseId != null),
-        _id = useCaseId;
+  AsyncFormUseCase.mustCall({
+    @required this.useCaseId,
+  }) : assert(useCaseId != null);
 
   Future<AsyncResponse<R>> send(F form);
 
@@ -18,7 +17,7 @@ abstract class AsyncFormUseCase<F, R> {
   Future<AsyncResponse<R>> validateAndSend(F form) async {
     if (form is FormWithKeyMixin && !form.validate()) {
       return AsyncResponse<R>.error(AsyncError(
-        id: _id,
+        id: useCaseId,
         code: 400,
         message: 'Invalid form data supplied',
       ));
