@@ -4,10 +4,16 @@ import 'package:meta/meta.dart';
 import 'event.dart';
 import 'state.dart';
 
-abstract class AsyncFormBloc<F, R>
-    extends Bloc<AsyncFormEvent, AsyncFormState<F>> {
+class AsyncFormBloc<F, R> extends Bloc<AsyncFormEvent, AsyncFormState<F>> {
+  final F _form;
+
+  AsyncFormBloc(F form)
+      : assert(form != null),
+        _form = form,
+        super();
+
   @override
-  AsyncFormState<F> get initialState;
+  AsyncFormState<F> get initialState => AsyncFormReady<F>(form: _form);
 
   @override
   @mustCallSuper
