@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-/// Async list response that can be extended
-class AsyncListResponse<M> with EquatableMixin {
+/// Async list response that must be extended
+abstract class AsyncListResponse<M> with EquatableMixin {
   // real data
   final List<M> data;
 
