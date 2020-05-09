@@ -3,20 +3,6 @@ import 'package:meta/meta.dart';
 
 import 'state.dart';
 
-abstract class AsyncListRequest {
-  final AsyncListRequestMeta meta;
-
-  AsyncListRequest(this.meta) : assert(meta != null);
-}
-
-/// Base async list request
-class BasicAsyncListRequest extends AsyncListRequest {
-  BasicAsyncListRequest({
-    @required AsyncListRequestMeta meta,
-  })  : assert(meta != null),
-        super(meta);
-}
-
 /// List request meta
 class AsyncListRequestMeta extends Equatable {
   final int page;
