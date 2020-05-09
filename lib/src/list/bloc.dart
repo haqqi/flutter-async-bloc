@@ -10,7 +10,7 @@ import 'state.dart';
 /// - Receive response
 /// - Init search submission
 /// - Reset list / refresh
-class AsyncListBloc<LD extends ListData<dynamic>,
+class AsyncListBloc<LD extends AsyncListData<dynamic>,
         R extends AsyncListResponse<dynamic>>
     extends Bloc<AsyncListEvent, AsyncListState<LD>> {
   final LD _data;
@@ -58,11 +58,18 @@ class AsyncListBloc<LD extends ListData<dynamic>,
         state.meta.hasReachedEnd =
             (currentPage == event.response.data.totalPage);
 
-        AsyncListReadyState<LD>(
+        yield AsyncListReadyState<LD>(
           data: state.list..addAll(event.response.data.list),
           meta: state.meta,
         );
       }
     }
+  }
+
+  @override
+  void onTransition(Transition<AsyncListEvent, AsyncListState> transition) {
+    super.onTransition(transition);
+
+    print(transition);
   }
 }

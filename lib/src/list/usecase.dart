@@ -3,8 +3,9 @@ import 'package:meta/meta.dart';
 import '../common/response.dart';
 import 'request.dart';
 import 'response.dart';
+import 'state.dart';
 
-abstract class AsyncListUseCase<F extends AsyncListRequest,
+abstract class AsyncListUseCase<LD extends AsyncListData<dynamic>,
     R extends AsyncListResponse<dynamic>> {
   final String useCaseId;
 
@@ -12,5 +13,10 @@ abstract class AsyncListUseCase<F extends AsyncListRequest,
     @required this.useCaseId,
   }) : assert(useCaseId != null);
 
-  Future<AsyncResponse<R>> fetch(F listRequest);
+  /// Fetch function that must provide request meta, but can also provide list
+  /// data if needed
+  Future<AsyncResponse<R>> fetch(
+    AsyncListRequestMeta requestMeta, [
+    LD listData,
+  ]);
 }
