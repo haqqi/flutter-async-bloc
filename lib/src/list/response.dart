@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// Async list response that must be extended
 abstract class AsyncListResponse<M> with EquatableMixin {
   // real data
-  final List<M> data;
+  final List<M> list;
 
   // response from server
   final int totalPage;
@@ -16,7 +16,7 @@ abstract class AsyncListResponse<M> with EquatableMixin {
   final String fetchedAt;
 
   AsyncListResponse.create({
-    @required this.data,
+    @required this.list,
     @required this.totalPage,
     @required this.totalItem,
     @required this.fetchedAt,
@@ -24,7 +24,7 @@ abstract class AsyncListResponse<M> with EquatableMixin {
 
   @override
   List<Object> get props => [
-        data,
+        list,
         totalPage,
         totalItem,
         fetchedAt,

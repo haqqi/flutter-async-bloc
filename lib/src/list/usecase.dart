@@ -12,5 +12,5 @@ abstract class AsyncListUseCase<F extends AsyncListRequest,
     @required this.useCaseId,
   }) : assert(useCaseId != null);
 
-  Future<AsyncResponse<R>> fetch(F request);
+  Future<AsyncResponse<R>> fetch(F listRequest);
 }
