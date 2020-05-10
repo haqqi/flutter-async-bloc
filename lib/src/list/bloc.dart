@@ -10,9 +10,9 @@ import 'state.dart';
 /// - Receive response
 /// - Init search submission
 /// - Reset list / refresh
-class AsyncListBloc<LD extends AsyncListData<dynamic>,
-        R extends AsyncListResponse<dynamic>>
-    extends Bloc<AsyncListEvent, AsyncListState<LD>> {
+class AsyncListBloc<M, LD extends AsyncListData<M>,
+        R extends AsyncListResponse<M>>
+    extends Bloc<AsyncListEvent, AsyncListState<M, LD>> {
   final LD _data;
 
   AsyncListBloc({
@@ -22,30 +22,30 @@ class AsyncListBloc<LD extends AsyncListData<dynamic>,
         super();
 
   @override
-  AsyncListState<LD> get initialState => AsyncListReadyState<LD>(
+  AsyncListState<M, LD> get initialState => AsyncListReadyState<M, LD>(
         data: _data,
         meta: AsyncListStateMeta.create(),
       );
 
   @override
-  Stream<AsyncListState<LD>> mapEventToState(AsyncListEvent event) async* {
+  Stream<AsyncListState<M, LD>> mapEventToState(AsyncListEvent event) async* {
     if (event is AsyncListFetchEvent) {
-      yield AsyncListFetchingState<LD>(
+      yield AsyncListFetchingState<M, LD>(
         data: state.list,
         meta: state.meta,
       );
     } else if (event is AsyncListReceiveResponse<R> &&
-        state is AsyncListFetchingState<LD>) {
+        state is AsyncListFetchingState<M, LD>) {
       // temp state for adding
-      yield AsyncListAddingDataState<LD, R>(
+      yield AsyncListProcessingResponseState<M, LD, R>(
         data: state.list, // no change in list
         meta: state.meta, // no change in meta
-        response: event.response.data, // add response if want to be used
+        response: event.response, // add response if want to be used
       );
 
       // if the response has error, don't update the data
       if (event.response.hasError) {
-        yield AsyncListReadyState<LD>(
+        yield AsyncListReadyState<M, LD>(
           data: state.list,
           meta: state.meta,
         );
@@ -58,7 +58,7 @@ class AsyncListBloc<LD extends AsyncListData<dynamic>,
         state.meta.hasReachedEnd =
             (currentPage == event.response.data.totalPage);
 
-        yield AsyncListReadyState<LD>(
+        yield AsyncListReadyState<M, LD>(
           data: state.list..addAll(event.response.data.list),
           meta: state.meta,
         );
@@ -67,7 +67,7 @@ class AsyncListBloc<LD extends AsyncListData<dynamic>,
   }
 
   @override
-  void onTransition(Transition<AsyncListEvent, AsyncListState> transition) {
+  void onTransition(Transition<AsyncListEvent, AsyncListState<M, LD>> transition) {
     super.onTransition(transition);
 
     print(transition);

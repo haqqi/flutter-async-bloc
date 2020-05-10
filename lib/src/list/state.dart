@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../common/constant.dart';
+import '../common/response.dart';
 import 'response.dart';
 
 /// Base [AsyncListData] for the state, so it can be extendable
@@ -15,12 +16,13 @@ class AsyncListData<M> extends ListBase<M> with EquatableMixin {
     List<M> initialData,
   }) : _data = initialData ?? <M>[];
 
-  /// Override of [EquatableMixin]
   @override
-  List<Object> get props => [_data];
+  int get length => _data.length;
 
   @override
-  int length;
+  set length(int newLength) {
+    _data.length = newLength;
+  }
 
   @override
   M operator [](int index) {
@@ -31,10 +33,14 @@ class AsyncListData<M> extends ListBase<M> with EquatableMixin {
   void operator []=(int index, M value) {
     _data[index] = value;
   }
+
+  /// Override of [EquatableMixin]
+  @override
+  List<Object> get props => [_data];
 }
 
 // base of list state
-abstract class AsyncListState<LD extends AsyncListData<dynamic>>
+abstract class AsyncListState<M, LD extends AsyncListData<M>>
     extends Equatable {
   /// Store the result
   final LD list;
@@ -56,8 +62,8 @@ abstract class AsyncListState<LD extends AsyncListData<dynamic>>
 }
 
 // Ready to send or manipulate list state
-class AsyncListReadyState<LD extends AsyncListData<dynamic>>
-    extends AsyncListState<LD> {
+class AsyncListReadyState<M, LD extends AsyncListData<M>>
+    extends AsyncListState<M, LD> {
   const AsyncListReadyState({
     @required LD data,
     @required AsyncListStateMeta meta,
@@ -65,22 +71,22 @@ class AsyncListReadyState<LD extends AsyncListData<dynamic>>
 }
 
 // Fetching list state
-class AsyncListFetchingState<LD extends AsyncListData<dynamic>>
-    extends AsyncListState<LD> {
+class AsyncListFetchingState<M, LD extends AsyncListData<M>>
+    extends AsyncListState<M, LD> {
   const AsyncListFetchingState({
     @required LD data,
     @required AsyncListStateMeta meta,
   }) : super.mustCall(list: data, meta: meta);
 }
 
-class AsyncListAddingDataState<LD extends AsyncListData<dynamic>,
-    R extends AsyncListResponse<dynamic>> extends AsyncListState<LD> {
-  final R response;
+class AsyncListProcessingResponseState<M, LD extends AsyncListData<M>,
+    R extends AsyncListResponse<M>> extends AsyncListState<M, LD> {
+  final AsyncResponse<R> response;
 
-  const AsyncListAddingDataState({
+  const AsyncListProcessingResponseState({
     @required LD data,
     @required AsyncListStateMeta meta,
-    @required R this.response,
+    @required AsyncResponse<R> this.response,
   }) : super.mustCall(list: data, meta: meta);
 }
 

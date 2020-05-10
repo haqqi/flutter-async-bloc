@@ -5,7 +5,7 @@ import 'request.dart';
 import 'response.dart';
 import 'state.dart';
 
-abstract class AsyncListUseCase<LD extends AsyncListData<dynamic>,
+abstract class AsyncListUseCase<M, LD extends AsyncListData<M>,
     R extends AsyncListResponse<dynamic>> {
   final String useCaseId;
 
